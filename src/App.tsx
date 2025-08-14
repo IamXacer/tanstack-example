@@ -1,27 +1,27 @@
-import './App.css'
 import {useQuery} from "@tanstack/react-query";
+import {client} from "./shared/api/client.ts";
 
 function App() {
-/*useLayoutEffect(() => {
-   ( async function () {
-       const response = await client.GET('/playlists')
-       const data = response.data
-      /!* const response = await fetch('https://musicfun.it-incubator.app/api/1.0/playlists', {
-           headers: {
-               'api-key': '9cc584e7-e30a-4c86-a83b-87222be5dc3c'
-           }
-       });
-       const  data = response.json()*!/
-        console.log(data)
-    })() },[])*/
-    const query = useQuery({
 
-    })
   return (
     <>
+      <PlayLists/>
+
    Hello World!
     </>
   )
 }
-
+const PlayLists = () => {
+    const query = useQuery({
+        queryKey:['playlists'],
+        queryFn:()=>client.GET('/playlists')
+    })
+    return <div>
+        <ul>
+            {query.data?.data?.data.map(playlist => (
+                <li key={playlist.id}>{playlist.attributes.title}</li>
+            ))}
+        </ul>
+    </div>
+}
 export default App
